@@ -278,6 +278,14 @@ func (t *TransformingTransport) RoundTrip(req *http.Request) (*http.Response, er
 		return nil, err
 	}
 
+	// ensure that 200 responses always contain image content.
+	contentType := http.DetectContentType(b)
+	if resp.StatusCode == http.StatusOK && !strings.HasPrefix(contentType, "image/") {
+		err := fmt.Errorf("response contains non-image content: %v", contentType)
+		glog.Error(err)
+		return nil, err
+	}
+
 	opt := ParseOptions(req.URL.Fragment)
 
 	img, err := Transform(b, opt)

@@ -226,6 +226,9 @@ func (t testTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		png.Encode(img, m)
 
 		raw = fmt.Sprintf("HTTP/1.1 200 OK\nContent-Length: %d\n\n%s", len(img.Bytes()), img.Bytes())
+	case "/txt":
+		txt := "hello, world"
+		raw = fmt.Sprintf("HTTP/1.1 200 OK\nContent-Length: %d\n\n%s", len(txt), txt)
 	default:
 		raw = "HTTP/1.1 404 Not Found\n\n"
 	}
@@ -305,6 +308,9 @@ func TestTransformingTransport(t *testing.T) {
 		// TODO: test more than just status code... verify that image
 		// is actually transformed and returned properly and that
 		// non-image responses are returned as-is
+
+		// non-image response body
+		{"http://good.test/txt#1", http.StatusInternalServerError, true},
 	}
 
 	for _, tt := range tests {
