@@ -22,7 +22,7 @@ import (
 	"image/png"
 
 	"github.com/disintegration/imaging"
-	"willnorris.com/go/gifresize"
+	"github.com/zischwartz/gifresize"
 )
 
 // default compression quality of resized jpegs
